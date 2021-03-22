@@ -1,2 +1,4 @@
 lxml==4.6.3
 requests==2.25.1
+pymorphy2==0.9.1
+nltk==3.5
