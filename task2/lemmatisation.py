@@ -27,6 +27,18 @@ def get_normal_form(tokens):
         normalized_words[token.lower()] = temp_set
     return normalized_words
 
+def get_normal_form_indexed(tokens, indx):
+    normalized_words = dict()
+    for token in tokens:
+        parsed_word = analyzer.parse(token)
+        if parsed_word[0].tag.POS in functors_pos:
+            continue
+        temp_set = set()
+        for candidate in parsed_word:
+            temp_set.add(candidate.normal_form)
+        for normal_form in temp_set:
+            normalized_words[normal_form] = {indx}
+    return normalized_words
 
 def contains_numeric(string):
     return RE_D.search(string)
