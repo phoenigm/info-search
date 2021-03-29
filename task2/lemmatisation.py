@@ -27,6 +27,7 @@ def get_normal_form(tokens):
         normalized_words[token.lower()] = temp_set
     return normalized_words
 
+
 def get_normal_form_indexed(tokens, indx):
     normalized_words = dict()
     for token in tokens:
@@ -39,6 +40,23 @@ def get_normal_form_indexed(tokens, indx):
         for normal_form in temp_set:
             normalized_words[normal_form] = {indx}
     return normalized_words
+
+
+# Возвращает количество вхождений слова в документ {'удивительный': 1, 'энциклопедия': 2}
+def get_normal_form_counts(tokens):
+    normalized_words = dict()
+    for token in tokens:
+        parsed_word = analyzer.parse(token)
+        if parsed_word[0].tag.POS in functors_pos:
+            continue
+        for candidate in parsed_word:
+            nf = candidate.normal_form
+            if nf in normalized_words:
+                normalized_words[nf] = normalized_words[nf] + 1
+            else:
+                normalized_words[nf] = 1
+    return normalized_words
+
 
 def contains_numeric(string):
     return RE_D.search(string)
@@ -60,22 +78,24 @@ def sanitize_text(text_to_process):
     return [token for token in tokens if token not in puncto and not contains_numeric(token)]
 
 
+
 nltk.download('punkt')
 RE_D: Final = re.compile('\d')
 functors_pos = {'INTJ', 'PRCL', 'CONJ', 'PREP'}
 analyzer = pymorphy2.MorphAnalyzer()
 puncto = [',', '.', ':', '?', '«', '»', '-', '(', ')', '!', '\'', '—', ';', '”', '...', '\"', '``', '@', '\'\'',
-              '%', '--', '[', ']', '=', '+', '*', '\\', '$', '~', '&']
-texts = dict()
+          '%', '--', '[', ']', '=', '+', '*', '\\', '$', '~', '&']
 
+if __name__ == "__main__":
+    texts = dict()
 
-for i in range(104):
-    text = parse_text(i)
-    text = sanitize_text(text)
-    append_to_file('Words.txt', text)
-    normalized_text = get_normal_form(text)
-    texts.update(normalized_text)
+    for i in range(104):
+        text = parse_text(i)
+        text = sanitize_text(text)
+        append_to_file('Words.txt', text)
+        normalized_text = get_normal_form(text)
+        texts.update(normalized_text)
 
-with open("data/Lems.txt", 'a', encoding='utf-8') as f:
-    for key, value in texts.items():
-        f.write(key + ' ' + str.join(' ', value) + '\n')
+    with open("data/Lems.txt", 'a', encoding='utf-8') as f:
+        for key, value in texts.items():
+            f.write(key + ' ' + str.join(' ', value) + '\n')
