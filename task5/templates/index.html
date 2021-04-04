@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script type="module" src="../static/jquery.min.js"></script>
+    <link rel="stylesheet" href="../static/index.css">
+    <title>Search panel</title>
+</head>
+<body>
+<script type="module">
+    $('#myInput').keyup(function () {
+        $.ajax({
+            contentType: 'application/json',
+            data: JSON.stringify({'query': $(this).val()}),
+            dataType: 'json',
+            success: (data) => {
+                $('#myUL').empty()
+                data.forEach(result => {
+                    $("#myUL").append('<li><a href="' + result + '">' + result + '</a></li>');
+                })
+            },
+            processData: false,
+            type: 'POST',
+            url: `http://localhost:5000/search`
+        });
+    });
+</script>
+
+<input type="text" id="myInput" placeholder="Type your search query...">
+<ul id="myUL">
+</ul>
+
+</body>
+</html>

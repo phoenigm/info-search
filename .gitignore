@@ -241,7 +241,7 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-# pytype static type analyzer
+# pytype templates type analyzer
 .pytype/
 
 # operating system-related files

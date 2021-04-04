@@ -1,6 +1,6 @@
 import math
 
-from task2.lemmatisation import get_normal_form_counts, parse_text, sanitize_text, get_normal_form_indexed
+from task2.lemmatisation import get_normal_form_counts, parse_text, sanitize_text
 from task3.inverted_index import word_in_documents, document_count
 texts = word_in_documents()
 
